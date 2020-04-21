@@ -134,11 +134,13 @@ ReceiverHandler<MaxReceivers, LockingPolicy>::addNewReceiver(ReceiverPortType::M
                 {
                     ReceiverPortType(f_receiver).deliver(m_lastChunk);
                 }
+#if 0
                 else
                 {
                     errorHandler(Error::kPOSH__SENDERPORT_FIELD_SUBSCRIBE_WITHOUT_DATA);
                     return false;
                 }
+#endif
             }
         }
         else
