@@ -81,3 +81,8 @@ setup_install_directories_and_export_package(
     TARGETS iceoryx_introspection
     INCLUDE_DIRECTORY include/
 )
+
+install(
+    TARGETS iceoryx_introspection_client
+    RUNTIME DESTINATION bin
+)
