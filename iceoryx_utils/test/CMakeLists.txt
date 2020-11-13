@@ -33,7 +33,7 @@ elseif(QNX)
 elseif(APPLE)
     set(TEST_CXX_FLAGS PRIVATE ${ICEORYX_WARNINGS} -Wno-pedantic -Wno-conversion)
 elseif(WIN32)
-    set(TEST_CXX_FLAGS )
+    set(TEST_CXX_FLAGS PRIVATE /bigobj)
 endif()
 
 
@@ -68,6 +68,16 @@ target_compile_options(${PROJECT_PREFIX}_componenttests PRIVATE ${TEST_CXX_FLAGS
 target_include_directories(${PROJECT_PREFIX}_componenttests PRIVATE .)
 target_link_libraries(${PROJECT_PREFIX}_componenttests ${TEST_LINK_LIBS})
 set_target_properties(${PROJECT_PREFIX}_componenttests PROPERTIES 
+    CXX_STANDARD_REQUIRED ON
+    CXX_STANDARD ${ICEORYX_CXX_STANDARD}
+    POSITION_INDEPENDENT_CODE ON
+)
+
+# stress tests
+add_executable( test_stress_sofi stresstests/test_stress_sofi.cpp)
+target_compile_options(test_stress_sofi PUBLIC ${TEST_CXX_FLAGS})
+target_link_libraries(test_stress_sofi ${TEST_LINK_LIBS})
+set_target_properties(test_stress_sofi PROPERTIES
     CXX_STANDARD_REQUIRED ON
     CXX_STANDARD ${ICEORYX_CXX_STANDARD}
     POSITION_INDEPENDENT_CODE ON

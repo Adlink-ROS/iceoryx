@@ -14,9 +14,9 @@
 #ifndef IOX_POSH_POPO_RECEIVER_PORT_DATA_HPP
 #define IOX_POSH_POPO_RECEIVER_PORT_DATA_HPP
 
-#include "iceoryx_posh/internal/popo/ports/base_port_data.hpp"
 #include "iceoryx_posh/capro/service_description.hpp"
 #include "iceoryx_posh/internal/popo/delivery_fifo.hpp"
+#include "iceoryx_posh/internal/popo/ports/base_port_data.hpp"
 #include "iceoryx_posh/internal/popo/used_chunk_list.hpp"
 #include "iceoryx_posh/mepoo/chunk_header.hpp"
 #include "iceoryx_posh/mepoo/memory_info.hpp"
@@ -33,7 +33,7 @@ namespace popo
 struct ReceiverPortData : public BasePortData
 {
     using mutex_t = posix::mutex; // std::mutex
-    using MemoryInfo = iox::mepoo::MemoryInfo;
+    using MemoryInfo = mepoo::MemoryInfo;
 
     ReceiverPortData() noexcept;
     ReceiverPortData(const capro::ServiceDescription& serviceDescription,
@@ -46,13 +46,13 @@ struct ReceiverPortData : public BasePortData
     std::atomic<SubscribeState> m_subscriptionState{SubscribeState::NOT_SUBSCRIBED};
 
     DeliveryFiFo m_deliveryFiFo;
-    static constexpr uint32_t DELIVERED_LIST_SIZE = 2u * MAX_RECEIVER_QUEUE_CAPACITY;
+    static constexpr uint32_t DELIVERED_LIST_SIZE = 2u * MAX_SUBSCRIBER_QUEUE_CAPACITY;
     UsedChunkList<DELIVERED_LIST_SIZE> m_deliveredChunkList;
 
     // event callback related
     mutable std::atomic_bool m_chunkSendCallbackActive{false};
     mutable mutex_t m_chunkSendCallbackMutex{false};
-    iox::relative_ptr<posix::Semaphore> m_chunkSendSemaphore{nullptr};
+    relative_ptr<posix::Semaphore> m_chunkSendSemaphore{nullptr};
 
     // offer semaphore that is stored in shared memory
     iox_sem_t m_shmSemaphoreHandle;

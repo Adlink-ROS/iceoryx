@@ -17,9 +17,9 @@
 #include "iceoryx_posh/internal/popo/building_blocks/condition_variable_waiter.hpp"
 
 #include "test.hpp"
+#include <atomic>
 #include <memory>
 #include <thread>
-#include <atomic>
 
 using namespace ::testing;
 using ::testing::Return;
@@ -34,7 +34,8 @@ class ConditionVariable_test : public Test
     ConditionVariableWaiter m_waiter{&m_condVarData};
     ConditionVariableSignaler m_signaler{&m_condVarData};
 
-    iox::posix::Semaphore m_syncSemaphore = iox::posix::Semaphore::create(0u).get_value();
+    iox::posix::Semaphore m_syncSemaphore =
+        iox::posix::Semaphore::create(iox::posix::CreateUnnamedSingleProcessSemaphore, 0u).get_value();
 
     void SetUp(){};
     void TearDown()

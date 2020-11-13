@@ -178,6 +178,8 @@ We aim for [ASIL-D](https://en.wikipedia.org/wiki/Automotive_Safety_Integrity_Le
 [ISO26262](https://en.wikipedia.org/wiki/ISO_26262) is also a good read-up if you want to learn more about automotive
 safety. A nice introduction [video](https://www.youtube.com/watch?v=F4GzsA00s5I) was presented on CppCon 2019.
 
+If you want to report a vulnerability, please use the [Eclipse process](https://www.eclipse.org/security/).
+
 We have a [partnership](https://www.perforce.com/blog/qac/why-eclipse-iceoryx-uses-helix-qac) with [Perforce](https://www.perforce.com) and use
 [Helix QAC++ 2019.2](https://www.perforce.com/products/helix-qac) to perform a static-code analysis.
 
@@ -192,9 +194,11 @@ Github [labels](https://github.com/eclipse/iceoryx/labels) are used to group iss
 If one of the rules is not followed, a rationale is added in the following manner:
 
 With a comment in the same line:
+
     *mynullptr = foo; // PRQA S 4242 # Short description why
 
 With a comment one line above (with the number after the warning number, next ’n’ lines are inclusive)
+
     // PRQA S 4242 1 # Short description why
     *mynullptr = foo;
 
@@ -212,7 +216,8 @@ requests. We're planning to introduce continuos integration checks in the near f
 
 Each source file needs to have this header:
 
-    // Copyright (c) [year] by [Name of author]. All rights reserved.
+```
+    // Copyright (c) [DATE] by [INITIAL COPYRIGHT OWNER] [OTHER COPYRIGHT OWNERS]. All rights reserved.
     //
     // Licensed under the Apache License, Version 2.0 (the "License");
     // you may not use this file except in compliance with the License.
@@ -225,6 +230,26 @@ Each source file needs to have this header:
     // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     // See the License for the specific language governing permissions and
     // limitations under the License.
+```
+Note: `DATE` is either a year or a range of years with the first and last years of the range separated by a comma. So for example: "2004" or "2000, 2004". The first year is when the contents of the file were first created and the last year is when the contents were last modified.
+
+Example:
+
+```
+    // Copyright (c) 2018, 2020 by ACME Corp, Globex. All rights reserved.
+    //
+    // Licensed under the Apache License, Version 2.0 (the "License");
+    // you may not use this file except in compliance with the License.
+    // You may obtain a copy of the License at
+    //
+    //     http://www.apache.org/licenses/LICENSE-2.0
+    //
+    // Unless required by applicable law or agreed to in writing, software
+    // distributed under the License is distributed on an "AS IS" BASIS,
+    // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    // See the License for the specific language governing permissions and
+    // limitations under the License.
+```
 
 ## Quality levels
 

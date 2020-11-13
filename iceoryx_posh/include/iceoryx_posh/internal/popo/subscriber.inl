@@ -26,7 +26,8 @@ inline Subscriber_t<ReceiverPortType>::Subscriber_t() noexcept
 template <typename ReceiverPortType>
 inline Subscriber_t<ReceiverPortType>::Subscriber_t(const capro::ServiceDescription& service,
                                                     const cxx::CString100& runnableName) noexcept
-    : m_serviceDescription(service), m_receiver(runtime::PoshRuntime::getInstance().getMiddlewareReceiver(service, runnableName))
+    : m_serviceDescription(service)
+    , m_receiver(runtime::PoshRuntime::getInstance().getMiddlewareReceiver(service, runnableName))
 {
 }
 
@@ -47,11 +48,11 @@ inline void Subscriber_t<ReceiverPortType>::subscribe(const uint32_t cacheSize) 
 {
     m_subscribeDemand = true;
     uint32_t size = cacheSize;
-    if (size > MAX_RECEIVER_QUEUE_CAPACITY)
+    if (size > MAX_SUBSCRIBER_QUEUE_CAPACITY)
     {
         LogWarn() << "Cache size for subscribe too large " << size
-                  << ", limiting to MAX_RECEIVER_QUEUE_CAPACITY = " << MAX_RECEIVER_QUEUE_CAPACITY;
-        size = MAX_RECEIVER_QUEUE_CAPACITY;
+                  << ", limiting to MAX_SUBSCRIBER_QUEUE_CAPACITY = " << MAX_SUBSCRIBER_QUEUE_CAPACITY;
+        size = MAX_SUBSCRIBER_QUEUE_CAPACITY;
     }
     m_receiver.subscribe(true, size);
 }
@@ -165,7 +166,9 @@ inline bool Subscriber_t<ReceiverPortType>::tryWaitForChunk() noexcept
     const auto semaphore = m_receiver.GetShmSemaphore();
     assert(semaphore != nullptr && "TryWaitForChunk: semaphore is not set");
 
-    return semaphore->tryWait();
+    auto call = semaphore->tryWait();
+    assert(call.has_error() && "Semaphore is corrupted");
+    return call.get_value();
 }
 
 template <typename ReceiverPortType>
@@ -267,7 +270,8 @@ inline void Subscriber_t<ReceiverPortType>::eventCallbackMain() noexcept
 }
 
 template <typename ReceiverPortType>
-inline capro::ServiceDescription Subscriber_t<ReceiverPortType>::getServiceDescription() const noexcept {
+inline capro::ServiceDescription Subscriber_t<ReceiverPortType>::getServiceDescription() const noexcept
+{
     return m_serviceDescription;
 }
 

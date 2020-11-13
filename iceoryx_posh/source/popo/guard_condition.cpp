@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License
+// limitations under the License.
 
 #include "iceoryx_posh/popo/guard_condition.hpp"
 #include "iceoryx_posh/runtime/posh_runtime.hpp"
@@ -19,12 +19,12 @@ namespace iox
 {
 namespace popo
 {
-void GuardCondition::setTrigger() noexcept
+void GuardCondition::trigger() noexcept
 {
-    m_wasTriggered.store(true, std::memory_order_relaxed);
     std::lock_guard<std::mutex> g(m_mutex);
     if (isConditionVariableAttached() && m_conditionVariableDataPtr)
     {
+        m_wasTriggered.store(true, std::memory_order_relaxed);
         ConditionVariableSignaler condVarSignaler{m_conditionVariableDataPtr};
         condVarSignaler.notifyOne();
     }

@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License
+// limitations under the License.
 
 #include "iceoryx_posh/internal/popo/ports/subscriber_port_single_producer.hpp"
 
@@ -24,7 +24,7 @@ SubscriberPortSingleProducer::SubscriberPortSingleProducer(
 {
 }
 
-cxx::optional<capro::CaproMessage> SubscriberPortSingleProducer::getCaProMessage() noexcept
+cxx::optional<capro::CaproMessage> SubscriberPortSingleProducer::tryGetCaProMessage() noexcept
 {
     // get subscribe request from user side
     const auto currentSubscribeRequest = getMembers()->m_subscribeRequested.load(std::memory_order_relaxed);
@@ -62,8 +62,8 @@ cxx::optional<capro::CaproMessage> SubscriberPortSingleProducer::getCaProMessage
     }
 }
 
-cxx::optional<capro::CaproMessage>
-SubscriberPortSingleProducer::dispatchCaProMessage(const capro::CaproMessage& caProMessage) noexcept
+cxx::optional<capro::CaproMessage> SubscriberPortSingleProducer::dispatchCaProMessageAndGetPossibleResponse(
+    const capro::CaproMessage& caProMessage) noexcept
 {
     const auto currentSubscriptionState = getMembers()->m_subscriptionState.load(std::memory_order_relaxed);
 
